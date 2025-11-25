@@ -1,0 +1,23 @@
+DATABASE_FIX_SUMMARY.md
+
+# Configuration files with secrets (keep config.php template in repo)
+# config.php
+
+# AI Assistant logs
+logs/
+/tmp/ollama*.log
+nohup.out
+
+# Demo and test files (exclude from production)
+ai-chat-demo.html
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
