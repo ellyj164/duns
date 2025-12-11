@@ -6,11 +6,17 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+# Global permissions
+permissions:
+  contents: read
+
 jobs:
   # PHP Linting and Code Quality
   code-quality:
     runs-on: ubuntu-latest
     name: Code Quality Checks
+    permissions:
+      contents: read
     
     steps:
     - uses: actions/checkout@v3
@@ -41,6 +47,8 @@ jobs:
   security:
     runs-on: ubuntu-latest
     name: Security Scan
+    permissions:
+      contents: read
     
     steps:
     - uses: actions/checkout@v3
@@ -64,6 +72,8 @@ jobs:
   database:
     runs-on: ubuntu-latest
     name: Database Migration Tests
+    permissions:
+      contents: read
     
     services:
       mysql:
@@ -116,6 +126,8 @@ jobs:
   api-tests:
     runs-on: ubuntu-latest
     name: API Endpoint Tests
+    permissions:
+      contents: read
     
     steps:
     - uses: actions/checkout@v3
@@ -147,6 +159,8 @@ jobs:
     name: Deploy to Production
     needs: [code-quality, security, database, api-tests]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
     
     steps:
     - uses: actions/checkout@v3
@@ -176,6 +190,8 @@ jobs:
     name: Send Notifications
     needs: [code-quality, security, database, api-tests]
     if: always()
+    permissions:
+      contents: read
     
     steps:
     - name: Check Status
