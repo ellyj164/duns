@@ -70,9 +70,11 @@ try {
         $params[':searchQuery2'] = $searchQuery;
         $params[':searchQuery3'] = $searchQuery;
         $params[':searchQuery4'] = $searchQuery;
-        
-        // 24-hour delay filter for JOSIEPH records during search
-        // Hide JOSIEPH records created less than 24 hours ago when searching
+    }
+    
+    // 24-hour delay filter for JOSIEPH records - applies to ALL searches and filters
+    // Hide JOSIEPH records created less than 24 hours ago when any filter or search is active
+    if ($isSearchOrFilter) {
         $where_clauses[] = "(UPPER(Responsible) NOT LIKE '%JOSIEPH%' OR created_at IS NULL OR created_at <= DATE_SUB(NOW(), INTERVAL 24 HOUR))";
     }
     

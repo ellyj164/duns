@@ -69,7 +69,7 @@ if ($paid_amount >= $amount && $amount > 0) {
 try {
     $pdo->beginTransaction();
 
-    // Check for duplicate reg_no
+    // Check for duplicate reg_no - ENHANCED DUPLICATE CHECKER
     if (!empty($reg_no)) {
         $checkSql = "SELECT COUNT(*) FROM clients WHERE reg_no = :reg_no";
         $checkStmt = $pdo->prepare($checkSql);
@@ -77,10 +77,11 @@ try {
         $count = $checkStmt->fetchColumn();
         
         if ($count > 0) {
+            $pdo->rollBack();
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'error' => 'Duplicate Registration Number: This reg no already exists in the system'
+                'error' => 'Duplicate Warning: Registration Number "' . htmlspecialchars($reg_no) . '" already exists in the system. Please use a unique Reg No.'
             ]);
             exit;
         }
