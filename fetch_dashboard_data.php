@@ -74,8 +74,9 @@ try {
     
     // 24-hour delay filter for JOSIEPH records - applies to ALL searches and filters
     // Hide JOSIEPH records created less than 24 hours ago when any filter or search is active
+    // Only include JOSIEPH records if they have a valid created_at AND it's older than 24 hours
     if ($isSearchOrFilter) {
-        $where_clauses[] = "(UPPER(Responsible) NOT LIKE '%JOSIEPH%' OR created_at IS NULL OR created_at <= DATE_SUB(NOW(), INTERVAL 24 HOUR))";
+        $where_clauses[] = "(UPPER(Responsible) NOT LIKE '%JOSIEPH%' OR (created_at IS NOT NULL AND created_at <= DATE_SUB(NOW(), INTERVAL 24 HOUR)))";
     }
     
     if (!empty($_GET['filterDateFrom'])) {
