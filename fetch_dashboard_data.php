@@ -70,6 +70,10 @@ try {
         $params[':searchQuery2'] = $searchQuery;
         $params[':searchQuery3'] = $searchQuery;
         $params[':searchQuery4'] = $searchQuery;
+        
+        // 24-hour delay filter for JOSEPH records during search
+        // Hide JOSEPH records created less than 24 hours ago when searching
+        $where_clauses[] = "(UPPER(Responsible) NOT LIKE '%JOSEPH%' OR created_at IS NULL OR created_at <= DATE_SUB(NOW(), INTERVAL 24 HOUR))";
     }
     
     if (!empty($_GET['filterDateFrom'])) {
