@@ -69,6 +69,23 @@ if ($paid_amount >= $amount && $amount > 0) {
 try {
     $pdo->beginTransaction();
 
+    // Check for duplicate reg_no
+    if (!empty($reg_no)) {
+        $checkSql = "SELECT COUNT(*) FROM clients WHERE reg_no = :reg_no";
+        $checkStmt = $pdo->prepare($checkSql);
+        $checkStmt->execute([':reg_no' => $reg_no]);
+        $count = $checkStmt->fetchColumn();
+        
+        if ($count > 0) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Duplicate Registration Number: This reg no already exists in the system'
+            ]);
+            exit;
+        }
+    }
+
     $sql = "INSERT INTO clients (reg_no, client_name, date, Responsible, TIN, service, amount, currency, paid_amount, due_amount, status) 
             VALUES (:reg_no, :client_name, :date, :Responsible, :TIN, :service, :amount, :currency, :paid_amount, :due_amount, :status)";
     $stmt = $pdo->prepare($sql);

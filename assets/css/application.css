@@ -861,13 +861,51 @@
   border-top: 1px solid var(--border-primary);
 }
 
-/* Relative Date Style */
+/* Relative Date Style - Enhanced for time ago counter */
 .relative-date {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   font-style: italic;
+  font-weight: var(--font-weight-bold);
   display: block;
-  margin-top: 0.125rem;
+  margin-top: 0.25rem;
+}
+
+/* Time ago counter specific styling */
+.time-ago {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+  font-weight: var(--font-weight-bold);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Single-line table cell styling */
+.enhanced-table td {
+  white-space: nowrap;
+}
+
+/* Text truncation with ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Horizontal layout for user info (avatar + name) */
+.user-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+/* Enable horizontal scrolling for table */
+.table-responsive-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Action Button Cells */

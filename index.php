@@ -686,6 +686,32 @@ $(document).ready(function() {
         $('#confirmModal-cancel').off('click').one('click', () => $('#confirmModal').removeClass('show'));
     };
     const formatCurrency = (amount) => amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    
+    /**
+     * Calculate time ago from a timestamp
+     */
+    const getTimeAgo = (timestamp) => {
+        if (!timestamp) return '';
+        
+        const now = new Date();
+        const past = new Date(timestamp);
+        const diffMs = now - past;
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHr = Math.floor(diffMin / 60);
+        const diffDays = Math.floor(diffHr / 24);
+        const diffWeeks = Math.floor(diffDays / 7);
+        const diffMonths = Math.floor(diffDays / 30);
+        const diffYears = Math.floor(diffDays / 365);
+        
+        if (diffSec < 60) return 'just now';
+        if (diffMin < 60) return `${diffMin} minute${diffMin > 1 ? 's' : ''} ago`;
+        if (diffHr < 24) return `${diffHr} hour${diffHr > 1 ? 's' : ''} ago`;
+        if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        if (diffWeeks < 4) return `${diffWeeks} week${diffWeeks > 1 ? 's' : ''} ago`;
+        if (diffMonths < 12) return `${diffMonths} month${diffMonths > 1 ? 's' : ''} ago`;
+        return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
+    };
 
     // --- Data Fetching and Rendering ---
 
@@ -778,18 +804,13 @@ $(document).ready(function() {
                 ? `<div class="user-info"><span class="user-avatar">${initials}</span><span>${responsibleName}</span></div>`
                 : '';
             
-            // Format date with relative time
-            const dateObj = new Date(client.date);
-            const today = new Date();
-            const diffTime = Math.abs(today - dateObj);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            let relativeDate = '';
-            if (diffDays === 0) relativeDate = 'Today';
-            else if (diffDays === 1) relativeDate = 'Yesterday';
-            else if (diffDays <= 7) relativeDate = `${diffDays} days ago`;
-            
-            const dateDisplay = relativeDate 
-                ? `${client.date}<span class="relative-date">${relativeDate}</span>`
+            // Format date with time ago counter
+            // Use created_at if available, otherwise use date field
+            // Ensure proper date format for JavaScript Date constructor
+            const createdAt = client.created_at || (client.date ? client.date + ' 00:00:00' : null);
+            const timeAgo = getTimeAgo(createdAt);
+            const dateDisplay = timeAgo 
+                ? `${client.date}<span class="time-ago">${timeAgo}</span>`
                 : client.date;
             
             // Title Case for client names
@@ -835,7 +856,7 @@ $(document).ready(function() {
                     <td>${dateDisplay}</td>
                     <td>${responsibleWithAvatar}</td>
                     <td>${client.TIN || ''}</td>
-                    <td title="${client.service}">${serviceBadge}</td>
+                    <td title="${client.service}"><div class="truncate" style="max-width: 20ch;">${serviceBadge}</div></td>
                     <td>${formatCurrency(parseFloat(client.amount))}</td>
                     <td>${client.currency}</td>
                     <td>${formatCurrency(parseFloat(client.paid_amount))}${progressBar}</td>
