@@ -878,25 +878,28 @@
   margin-top: 0.25rem;
 }
 
-/* Time ago counter specific styling */
+/* Time ago counter specific styling - ENHANCED for requirement */
 .time-ago {
-  font-size: 0.7rem;
+  font-size: 0.7rem;        /* Small font size */
   color: var(--text-muted);
-  font-style: italic;
-  font-weight: var(--font-weight-bold);
+  font-style: italic;        /* Italic as required */
+  font-weight: var(--font-weight-bold); /* Bold as required */
   display: block;
   margin-top: 0.25rem;
+  line-height: 1.2;
 }
 
 /* Date container for wrapping date and time-ago */
 .date-container {
   display: inline-block;
   white-space: normal; /* Allow internal wrapping for time-ago */
+  vertical-align: top;
 }
 
 .date-main {
   display: block;
-  white-space: nowrap;
+  white-space: nowrap;      /* Keep main date on one line */
+  line-height: 1.4;
 }
 
 /* Single-line table cell styling */
@@ -922,12 +925,22 @@
   display: inline-block;
 }
 
-/* Horizontal layout for user info (avatar + name) */
+/* Horizontal layout for user info (avatar + name) - ENHANCED to prevent stacking */
 .user-info {
   display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
+  align-items: center;      /* Vertically center avatar and name */
+  gap: 0.5rem;             /* Space between avatar and name */
+  white-space: nowrap;     /* Prevent wrapping to new line */
+  flex-wrap: nowrap;       /* Ensure no wrapping occurs */
+}
+
+.user-info .user-avatar {
+  flex-shrink: 0;          /* Avatar size stays constant */
+}
+
+.user-info .user-name {
+  flex-shrink: 1;          /* Name can shrink if needed */
+  min-width: 0;            /* Allow text truncation */
 }
 
 /* Enable horizontal scrolling for table */
